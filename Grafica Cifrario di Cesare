@@ -1,0 +1,140 @@
+package graficacesare;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class GraficaCesare {
+    static JTextField firstField = new JTextField(10);
+    static JTextField secondField = new JTextField(10);
+    static JTextField thirdField = new JTextField(10);
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Codice di Cesare");
+        frame.setSize(500,300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5,2));
+        frame.add(panel);
+
+        JLabel label = new JLabel("Inserisci il messaggio: ");
+        
+        JLabel chiave = new JLabel("Inserisci la chiave numerica: ");
+        
+        JLabel spazio = new JLabel();        
+        JLabel spazio2 = new JLabel(); 
+      
+        JButton button = new JButton("Codifica");
+        button.addActionListener(new ActionListener(){
+             
+        public void actionPerformed(ActionEvent e) {
+               String stringaOutput = new String();
+               stringaOutput="";
+               int i;
+               char output;
+               
+               String str = firstField.getText();
+               int n = str.length();
+           
+               int chiave = Integer.parseInt(secondField.getText());
+               
+                for (i=0; i<n  ;i++)
+               {      
+                  output =str.charAt(i);
+                   int out = (int) + (output);
+                   if ((out>=65) && out<= 90){ 
+                          output =(char) (output+chiave);
+                          int Out = (int) (output);
+                          if (Out >90) {
+                              int app= Out-91;
+                              int app2= 65+app;
+                             
+                              output =(char) (app2);
+                            }   
+                     }          
+                 
+                    if ((out>=97) && out<= 122){ 
+                          output =(char) (output+chiave);
+                          int Out = (int) (output);
+                          if (Out >122) {
+                              int app= Out-123;
+                              int app2= 97+app;
+                             
+                              output =(char) (app2);
+                            }     
+                   } 
+                    stringaOutput=stringaOutput + output ;
+               } 
+                     
+              thirdField.setText(stringaOutput);
+            }  
+        });
+        
+        JButton button2 = new JButton("Decodifica");
+        button2.addActionListener(new ActionListener(){
+            
+        public void actionPerformed(ActionEvent e) {
+               String stringaOutput = new String();
+               stringaOutput="";
+               int i;
+               char output;
+               
+               String str = firstField.getText();
+               int n = str.length();
+            
+               int chiave = Integer.parseInt(secondField.getText());
+               
+                 for (i=0; i<n  ;i++)
+               {      
+                    output =str.charAt(i);
+                   int out = (int) + (output);
+                   if ((out>=65) && out<= 90){ 
+                          output =(char) (output-chiave);
+                          int Out = (int) (output);
+                          if (Out < 65) {
+                              int app= 65-Out;
+                              int app2= 91-app;
+                              output =(char) (app2);
+                          }
+                    }
+                   
+                  if ((out>=97) && out<= 122){ 
+                          output =(char) (output-chiave);
+                          int Out = (int) (output);
+                          if (Out <97) {
+                              int app= 97-Out;
+                              int app2= 123-app;
+                              output =(char) (app2);
+                            
+                              }                      
+                          }
+                  stringaOutput=stringaOutput + output ;        
+                      }
+          thirdField.setText(stringaOutput);
+             }           
+        });
+        
+        JLabel label2 = new JLabel("Ecco il tuo messagio: ");
+        
+     
+        panel.add(button);
+        panel.add(button2);
+        
+        panel.add(label);
+        panel.add(firstField);  
+        
+        panel.add(chiave);
+        panel.add(secondField);
+        
+        panel.add(spazio);
+        panel.add(spazio2);
+        
+        panel.add(label2);
+        panel.add(thirdField);
+        
+        frame.pack();
+    }
+   
+}
