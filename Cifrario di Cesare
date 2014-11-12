@@ -1,0 +1,49 @@
+package cesare;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Cesare {
+
+    public static void main(String[] args) {
+        String stringaInput= "";
+        String[] stringaOutput=new String [100];
+        
+        char Output;
+                
+        int i,n = 0, num = 0;
+        InputStreamReader flusso = new InputStreamReader(System.in);
+        BufferedReader tastiera = new BufferedReader(flusso);
+     
+        System.out.print("Inserisci la frase: ");
+        try {
+            stringaInput = tastiera.readLine();
+            n = stringaInput.length();
+        } catch (IOException ex) {
+           System.out.print("Dato non corretto") ;
+        }  
+
+         System.out.print("Inserisci la chiave numerica: ");
+        try {
+            num = Integer.parseInt(tastiera.readLine());
+            
+        } catch (IOException ex) {
+           System.out.print("Dato non corretto") ;
+        }  
+        
+        for (i=0; i< n; i++) {
+        
+         
+          Output = stringaInput.charAt(i);
+          Output = (char) (Output+num);
+          stringaOutput[i]= "" + Output ;
+        }
+        
+        System.out.print("Ecco il tuo messaggio: ");
+        for (i=0; i< n ;i++)
+              {
+                  System.out.print(stringaOutput[i]);
+            }
+}
+}
