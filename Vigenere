@@ -1,0 +1,63 @@
+
+package vigenere;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Vigenere {
+
+    public static void main(String[] args) {
+        String Input="";
+        String Chiave="";
+        String[] alfabeto = new String[26];
+        int n=0;
+        int Input_num=0;
+        int Chiave_num=0;
+        
+        InputStreamReader flusso = new InputStreamReader(System.in);
+        BufferedReader tastiera = new BufferedReader(flusso);
+        
+        for (int i=0; i<26; i++)
+        {
+            alfabeto[i]= "" + (char) (97+i);
+        }
+  
+        System.out.println("Inserisci il testo");
+        try {
+            Input = tastiera.readLine();     
+            n = Input.length();
+              } catch (IOException ex) {
+                 System.out.print("Dato non corretto") ;
+              }  
+         System.out.println("Inserisci la chiave");
+         try {
+              Chiave = tastiera.readLine();     
+              } catch (IOException ex) {
+                  System.out.print("Dato non corretto") ;
+      
+              }
+
+         for (int i=0; i<n+1; i++)
+         {
+            // char primo_carattere = Input.charAt(i);
+             for (int k=0; k<26; k++)
+             {
+                 if (Input.substring(i) != alfabeto[k])
+                         {
+                            Input_num = k; 
+                         }
+                 if (Chiave.substring(i) != alfabeto[k])
+                         {
+                            Chiave_num = k;
+                         }
+             }
+             
+             int tot=Chiave_num + Input_num;
+             System.out.println(tot);
+         }
+         
+      
+    }
+    
+}
