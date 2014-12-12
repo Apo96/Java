@@ -1,0 +1,87 @@
+package grafica.vigenere;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+public class GraficaVigenere extends JFrame {
+    
+    static JTextField firstField = new JTextField(10);
+    static JTextField secondField = new JTextField(10);
+    static JTextField thirdField = new JTextField(10);
+
+    static JRadioButton codifica_button = new JRadioButton("Codifica");
+    static JRadioButton decodifica_button = new JRadioButton("Decodifica");
+        
+    public GraficaVigenere ()
+    {
+        ButtonGroup gp = new ButtonGroup();   
+        
+        JButton calcolo = new JButton("Calcola");
+
+        JPanel group1 = new JPanel();
+        group1.setLayout(new GridLayout(3,1));
+        group1.add(codifica_button);
+        group1.add(decodifica_button);
+        group1.add(calcolo);
+        
+        gp.add(codifica_button);
+        gp.add(decodifica_button);
+
+        JPanel group2 = new JPanel();
+        group2.setLayout(new GridLayout(5,2));
+        
+        JLabel testo = new JLabel("Inserisci il messaggio: ");
+        JLabel chiave = new JLabel("Inserisci la chiave numerica: ");
+        
+        JLabel spazio = new JLabel();
+        JLabel spazio_due = new JLabel();
+        
+        
+        calcolo.addActionListener(new ActionListener(){
+             
+        public void actionPerformed(ActionEvent e) {
+        if(codifica_button.isSelected()){
+            String str = firstField.getText();
+        }
+        else if(decodifica_button.isSelected()){
+            
+        }
+        
+      }
+        
+        });
+        
+        
+        group2.add(testo);
+        group2.add(firstField);
+        
+        group2.add(spazio);
+        group2.add(spazio_due);
+ 
+        group2.add(chiave);
+        group2.add(secondField);
+       
+        add(group1, BorderLayout.EAST);
+        add(group2, BorderLayout.WEST);
+
+            
+     }
+    
+   public static void main(String[] args) 
+   {
+
+        GraficaVigenere frame = new GraficaVigenere ();
+        frame.setTitle("Button Panel Example");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.pack();
+
+    }
+}
+    
+
+    
+    
+
