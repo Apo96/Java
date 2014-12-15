@@ -12,12 +12,13 @@ public class Sperimenti extends JFrame {
 
     public Sperimenti(){
        
-        InputMap inputMap = drawPanel.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+        InputMap inputMap = drawPanel.getInputMap();//JPanel.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = drawPanel.getActionMap();
             
         
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
         actionMap.put("rightAction", rightAction);
+        
         
         inputMap.put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
         actionMap.put("leftAction", leftAction);
@@ -28,31 +29,43 @@ public class Sperimenti extends JFrame {
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), "downAction");
         actionMap.put("downAction", downAction);
         
+        
+        
+        
         add(drawPanel);
-
+        
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    
+    
     private class DrawPanel extends JPanel {
 
         protected void paintComponent(Graphics g) {
+            
             super.paintComponent(g);
             g.setColor(Color.GRAY);
                     g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.GREEN);
             g.fillRect(x, y, 10, 10);
+
         }
         public Dimension getPreferredSize() {
             return new Dimension(400, 400);
         }
+         
     }
     
     Action downAction = new AbstractAction(){
         public void actionPerformed(ActionEvent e) {
-            y +=10;
+          //  if (y<390)
+                while (y<390)
+                    y +=10;
+           /* else
+                y = 390; */
             drawPanel.repaint();
         }
     };
@@ -60,28 +73,37 @@ public class Sperimenti extends JFrame {
     
     Action upAction = new AbstractAction(){
         public void actionPerformed(ActionEvent e) {
-            y -=10;
+            if (y>0)
+                y -=10;
+            else
+                y = 0;
             drawPanel.repaint();
         }
     };
     
       Action leftAction = new AbstractAction(){
         public void actionPerformed(ActionEvent e) {
-            x -=10;
+            if (x>0)
+                x -=10;
+            else
+                x = 0;
             drawPanel.repaint();
         }
     };
     
     Action rightAction = new AbstractAction(){
         public void actionPerformed(ActionEvent e) {
-            x +=10;
+            if (x<390)
+                x +=10;
+            else
+                x = 390;
             drawPanel.repaint();
         }
     };
 
     
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable(){
+        SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 new Sperimenti();
             }
@@ -90,4 +112,6 @@ public class Sperimenti extends JFrame {
 
    
 }
+
+
 
