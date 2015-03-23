@@ -1,0 +1,411 @@
+package des;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+
+public class Des {
+    
+    public static void main(String[] args) {
+        String stringaIn,chiaveIn,stringa="",chiave="",chiave_U="", nuovo="",stringa_U="", stringa_N="";
+        int n_0,n_U;
+                
+        InputStreamReader flusso = new InputStreamReader(System.in);
+        BufferedReader tastiera = new BufferedReader(flusso);
+        
+        System.out.print("Inserisci messaggio: ");
+        try {
+            stringa = tastiera.readLine();
+        }catch (IOException ex) {
+            System.out.print("Dato non corretto") ;
+        }  
+        
+        System.out.print("Inserisci chiave: ");
+        try {
+            chiave = tastiera.readLine();           
+        }catch (IOException ex) {
+            System.out.print("Dato non corretto") ;           
+        } 
+        
+        chiaveIn=String.format("%01x", new BigInteger(1, chiave.getBytes()));
+        stringaIn=String.format("%01x", new BigInteger(1,stringa.getBytes()));
+        
+        int n_I=chiaveIn.length();
+        String chiaveI=hexcompleteless(n_I, chiaveIn);
+        for(int i=0;i<16;i++){
+            String app=hexToBinary(chiaveI.substring(i,i+1));
+            String app2=binarycomplete(app.length(), app);
+            chiave_U+=app2;
+        }
+        n_0=chiave_U.length();
+        nuovo=binarycomplete(n_0,chiave_U);
+
+        int[][] pc1 = {
+            {57, 49, 41, 33, 25, 17,  9},
+            { 1, 58, 50, 42, 34, 26, 18},
+            {10,  2, 59, 51, 43, 35, 27},
+            {19, 11,  3, 60, 52, 44, 36},
+            {63, 55, 47, 39, 31, 23, 15},
+            { 7, 62, 54, 46, 38, 30, 22},
+            {14,  6, 61, 53, 45, 37, 29},
+            {21, 13,  5, 28, 20, 12,  4}           
+        };
+            
+        int store_num = 0;     
+        String permutazione_binario="";
+        for(int row=0;row<8; row++){
+            for(int col=0; col<7; col++){
+                store_num=pc1[row][col];
+                permutazione_binario+=nuovo.substring(store_num-1,store_num);
+            }
+        } 
+
+        String [] c= new String[17];       
+        String [] d= new String[17];
+        String c_app="";
+        String d_app="";
+        int lunghezza=permutazione_binario.length();
+        for(int k=0;k<lunghezza;k++){      
+            if(k<(lunghezza/2)){
+                c_app+=permutazione_binario.substring(k,k+1);
+                }else{
+                d_app+=permutazione_binario.substring(k,k+1);
+            } 
+        }
+        c[0]=c_app;
+        d[0]=d_app;
+
+        int [] shift = new int[17];
+            shift[1]=1;
+            shift[2]=1;
+            shift[3]=2;
+            shift[4]=2;
+            shift[5]=2;
+            shift[6]=2;
+            shift[7]=2;
+            shift[8]=2;
+            shift[9]=1;
+            shift[10]=2;
+            shift[11]=2;
+            shift[12]=2;
+            shift[13]=2;
+            shift[14]=2;
+            shift[15]=2;
+            shift[16]=1;
+
+        for(int i=1;i<17;i++){
+            if(shift[i]==1){
+                String app=c[i-1].substring(0,1);
+                c_app=c[i-1].substring(1);
+                c[i]=c_app+app;
+
+                String app2=d[i-1].substring(0, 1);
+                d_app=d[i-1].substring(1);
+                d[i]=d_app+app2;
+            }else{
+                String app=c[i-1].substring(0,2);
+                c_app=c[i-1].substring(2);
+                c[i]=c_app+app;
+
+                String app2=d[i-1].substring(0, 2);
+                d_app=d[i-1].substring(2);
+                d[i]=d_app+app2;
+            }
+        }
+
+        int[][] pc2 = {
+            {14, 17, 11, 24,  1,  5},
+            { 3, 28, 15,  6, 21, 10},
+            {23, 19, 12,  4, 26,  8},
+            {16,  7, 27, 20, 13,  2},
+            {41, 52, 31, 37, 47, 55},
+            {30, 40, 51, 45, 33, 48},
+            {44, 49, 39, 56, 34, 53},
+            {46, 42, 50, 36, 29, 32}           
+        };
+
+        String [] key = new String [17];
+        String c_d;
+        for(int i=1;i<17;i++){
+            String app="";
+            for(int row=0;row<8; row++){
+                for(int col=0; col<6; col++){
+                    c_d=c[i]+d[i];
+                    store_num=pc2[row][col];
+                    app+=c_d.substring(store_num-1,store_num);  
+                }   
+            } 
+            key[i]=app.substring(0);  
+        }  
+            //FINISH CODE KEY  
+            
+        int n_S=stringaIn.length();
+        if(n_S>=n_I){
+        String stringaI=hexcompleteless(n_S, stringaIn);
+        for(int i=0;i<16;i++){
+            String app=hexToBinary(stringaI.substring(i,i+1));
+            String app2=binarycomplete(app.length(), app);
+            stringa_U+=app2;
+        }
+        n_0=chiave_U.length();
+        stringa_N=binarycomplete(n_0,stringa_U);
+
+        int [][] IP = {
+            {58, 50, 42, 34, 26, 18, 10,  2},
+            {60, 52, 44, 36, 28, 20, 12,  4},
+            {62, 54, 46, 38, 30, 22, 14,  6},
+            {64, 56, 48, 40, 32, 24, 16,  8},
+            {57, 49, 41, 33, 25, 17,  9,  1},
+            {59, 51, 43, 35, 27, 19, 11,  3},
+            {61, 53, 45, 37, 29, 21, 13,  5},
+            {63, 55, 47, 39, 31, 23, 15,  7}
+        };
+
+        String permutazione_stringa_binario="";
+        for(int row=0;row<8; row++){
+            for(int col=0; col<8; col++){
+                store_num=IP[row][col];
+                permutazione_stringa_binario+=stringa_N.substring(store_num-1,store_num);
+            }
+        } 
+
+        lunghezza=permutazione_stringa_binario.length();
+        String l_app="";
+        String r_app="";
+        String [] l = new String[17];
+        String [] r = new String[17];
+        for(int k=0;k<lunghezza;k++){      
+            if(k<(lunghezza/2)){
+                l_app+=permutazione_stringa_binario.substring(k,k+1);
+            }else{
+                r_app+=permutazione_stringa_binario.substring(k,k+1);
+            } 
+        }
+        l[0]=l_app;
+        r[0]=r_app;
+
+        for(int s=0;s<16;s++){
+            int[][] E={
+                {32,  1,  2,  3,  4,  5},
+                { 4,  5,  6,  7,  8,  9},
+                { 8,  9, 10, 11, 12, 13},
+                {12, 13, 14, 15, 16, 17},
+                {16, 17, 18 ,19, 20 ,21},
+                {20, 21, 22, 23, 24, 25},
+                {24, 25, 26, 27, 28, 29},
+                {28, 29, 30, 31, 32,  1}
+            };
+            String e="";
+            for(int row=0;row<8; row++){
+                for(int col=0; col<6; col++){
+                    store_num=E[row][col];
+                    e+=r[s].substring(store_num-1,store_num);
+                }
+            } 
+            
+            String xor="";
+            for(int i=0;i<e.length();i++){
+                if(e.substring(i, i+1).equals(key[s+1].substring(i,i+1))){
+                    xor+=0;
+                }else{
+                    xor+=1;
+                }
+            }
+            
+            int [][] s1={
+                {14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7},
+                { 0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8},
+                { 4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0},
+                {15, 12,  8,  2,  4,  9,  1,  7,  5, 11,  3, 14, 10,  0,  6, 13}    
+            };
+            
+            int [][] s2={
+                {15,  1,  8, 14,  6, 11, 13,  4,  9,  7,  2, 13, 12,  0,  5, 10},
+                { 3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 10,  6,  9, 11,  5},
+                { 0, 14,  7, 11, 10,  4, 13,  1,  5,  8, 12,  6,  9,  3,  2, 15},
+                {13,  8, 10,  1,  3, 15,  4,  2, 11,  6,  7, 12,  0,  5, 14,  9}    
+            };
+            
+            int [][] s3={
+                {10,  0,  9, 14,  6,  3, 15,  5,  1, 13, 12,  7, 11,  4,  2,  8},
+                {13,  7,  0,  9,  3,  4,  6, 10,  2,  8,  5, 14, 12, 11, 15,  1},
+                {13,  6,  4,  9,  8, 15,  3,  0, 11,  1,  2, 12,  5, 10, 14,  7},
+                { 1, 10, 13,  0,  6,  9,  8,  7,  4, 15, 14,  3, 11,  5,  2, 12}    
+            };
+            
+            int [][] s4={
+                { 7, 13, 14,  3,  0,  6,  9, 10,  1,  2,  8,  5, 11, 12,  4, 15},
+                {13,  8, 11,  5,  6, 15,  0,  3,  4,  7,  2, 12,  1, 10, 14,  9},
+                {10,  6,  9,  0, 12, 11,  7, 13, 15,  1,  3, 14,  5,  2,  8,  4},
+                { 3, 15,  0,  6, 10,  1, 13,  8,  9,  4,  5, 11, 12,  7,  2, 14}    
+            };
+            
+            int [][] s5={
+                { 2, 12,  4,  1,  7, 10, 11,  6,  8,  5,  3, 15, 13,  0, 14,  9},
+                {14, 11,  2, 12,  4,  7, 13,  1,  5,  0, 15, 10,  3,  9,  8,  6},
+                { 4,  2,  1, 11, 10, 13,  7,  8, 15,  9, 12,  5,  6,  3,  0, 14},
+                {11,  8, 12,  7,  1, 14,  2, 13,  6, 15,  0,  9, 10,  4,  5,  3}    
+            };
+                    
+            int [][] s6={
+                {12,  1, 10, 15,  9,  2,  6,  8,  0, 13,  3,  4, 14,  7,  5, 11},
+                {10, 15,  4,  2,  7, 12,  9,  5,  6,  1, 13, 14,  0, 11,  3,  8},
+                { 9, 14, 15,  5,  2,  8, 12,  3,  7,  0,  4, 10,  1, 13, 11,  6},
+                { 4,  3,  2, 12,  9,  5, 15, 10, 11, 14,  1,  7,  6,  0,  8, 13}    
+            };   
+                    
+            int [][] s7={
+                { 4, 11,  2, 14, 15,  0,  8, 13,  3, 12,  9,  7,  5, 10,  6,  1},
+                {13,  0, 11,  7,  4,  9,  1, 10, 14,  3,  5, 12,  2, 15,  8,  6},
+                { 1,  4, 11, 13, 12,  3,  7, 14, 10, 15,  6,  8,  0,  5,  9,  2},
+                { 6, 11, 13,  8,  1,  4, 10,  7,  9,  5,  0, 15, 14,  2,  3, 12}
+            };
+                    
+            int [][] s8={
+                {13,  2,  8,  4,  6, 15, 11,  1, 10,  9,  3, 14,  5,  0, 12,  7},
+                { 1, 15, 13,  8, 10,  3,  7,  4, 12,  5,  6, 11,  0, 14,  9,  2},
+                { 7, 11,  4,  1,  9, 12, 14,  2,  0,  6, 10, 13, 15,  3,  5,  8},
+                { 2,  1, 14,  7,  4, 10,  8, 13, 15, 12,  9,  0,  3,  5,  6, 11}
+            };  
+
+            String permu_sbox="";
+            for(int i=1;i<9;i++){
+                String righe=xor.substring(0, 1)+xor.substring(5,6);
+                int righe_decimal= Integer.parseInt(righe, 2);
+
+                String colonna=xor.substring(1,5);
+                int colonna_decimal=Integer.parseInt(colonna, 2);
+                if(i==1){
+                    store_num=s1[righe_decimal][colonna_decimal]; 
+                    }else if(i==2){
+                    store_num=s2[righe_decimal][colonna_decimal];     
+                    }else if(i==3){
+                    store_num=s3[righe_decimal][colonna_decimal];     
+                    }else if(i==4){
+                    store_num=s4[righe_decimal][colonna_decimal];     
+                    }else if(i==5){
+                    store_num=s5[righe_decimal][colonna_decimal];     
+                    }else if(i==6){
+                    store_num=s6[righe_decimal][colonna_decimal];     
+                    }else if(i==7){
+                    store_num=s7[righe_decimal][colonna_decimal];     
+                    }else if(i==8){
+                    store_num=s8[righe_decimal][colonna_decimal];
+                }     
+                    
+                String binary = Integer.toBinaryString(store_num); 
+                
+                binary=binarycomplete(binary.length(),binary);
+                
+                xor=xor.substring(6);        
+                permu_sbox+=binary;
+            }
+            
+            int [][] P={
+                {16,  7, 20, 21},
+                {29, 12, 28, 17},
+                { 1, 15, 23, 26},
+                { 5, 18, 31, 10},
+                { 2,  8, 24, 14},
+                {32, 27,  3,  9},
+                {19, 13, 30,  6},
+                {22, 11,  4, 25}
+            };
+
+            String f="";
+            for(int row=0;row<8; row++){
+                for(int col=0; col<4; col++){
+                    store_num=P[row][col];
+                        f+=permu_sbox.substring(store_num-1,store_num);
+                }
+            } 
+  
+            r_app="";
+            for(int k=0;k<f.length();k++){
+                if(f.substring(k, k+1).equals(l[s].substring(k,k+1))){
+                    r_app+=0;
+                }else{
+                    r_app+=1;
+                }
+            }    
+                r[s+1]=r_app;
+                l[s+1]=r[s];
+        }
+        String r_l=r[16]+l[16];
+    
+        int [][] ip_1= {
+            {40,  8, 48, 16, 56, 24, 64, 32},
+            {39,  7, 47, 15, 55, 23, 63, 31},
+            {38,  6, 46, 14, 54, 22, 62, 30},
+            {37,  5, 45, 13, 53, 21, 61, 29},
+            {36,  4, 44, 12, 52, 20, 60, 28},
+            {35,  3, 43, 11, 51, 19, 59, 27},
+            {34,  2, 42, 10, 50, 18, 58, 26},
+            {33,  1, 41,  9, 49, 17, 57, 25}    
+        };
+        
+        String ip_out="";
+        for(int row=0;row<8; row++){
+            for(int col=0; col<8; col++){
+                store_num=ip_1[row][col];
+                ip_out+=r_l.substring(store_num-1,store_num);
+            }
+        }          
+        
+        BigInteger b= new BigInteger(ip_out,2);
+        String output=b.toString(16);
+        System.out.println(output);    
+        
+        
+        }else{
+            System.out.println("La chiave non può essere piu lungo del messaggio!!!");
+        }
+        
+        
+    }      
+    
+    
+    public static String hexcompleteless(int num, String hex){
+        boolean Completo=false;
+        
+        if(num % 16 == 0){
+            Completo=true;
+        }else{
+             do{
+                hex= hex + "0";
+                num++;
+                if(num % 16 == 0){
+                    Completo=true;
+                }
+            }while(Completo!=true);
+        }      
+        return hex;
+    }
+    
+    public static String hexToBinary(String hex) {
+        int i = Integer.parseInt(hex, 16);
+        String bin = Integer.toBinaryString(i);
+        return bin;
+    }
+    
+    
+    public static String binarycomplete(int num, String binario){
+        boolean Completo=false;
+        if (num % 4 == 0) {
+            Completo=true;
+            }else{
+            do{
+                binario="0" + binario;
+                num++;
+                if(num % 4 ==0){
+                    Completo=true;
+                    }
+              }while(Completo!=true);
+           }       
+        return binario;
+    }
+    
+ }
+  
+
